@@ -1,0 +1,44 @@
+﻿Snake (terminal, real-time)
+
+What it is: You steer a growing snake around a bordered grid with the arrow keys, eating food and avoiding walls and your own tail.
+
+What it makes you practice:
+
+A fixed-timestep game loop — the first time most people write one
+Non-blocking keyboard input (_kbhit/_getch) instead of scanf
+A ring buffer for the snake body, so growth and movement are O(1) instead of mem moving an array every tick
+Separating "update state" from "draw state" — the discipline that makes the rest of game programming possible
+Console cursor control, so you redraw instead of scrolling
+
+Core data structures:
+
+c
+typedef struct { int x, y; } Vec2;
+
+#define MAX_SNAKE 1024
+
+typedef struct {
+    Vec2 body[MAX_SNAKE];   /* ring buffer, newest at head */
+    int  head;              /* index of head segment */
+    int  len;               /* live segment count */
+    Vec2 dir;               /* current heading, e.g. {1,0} */
+    Vec2 pending_dir;       /* input buffered for next tick */
+    Vec2 food;
+    int  score;
+    int  alive;
+} Game;
+
+Segment i back from the head is g->body[(g->head - i + MAX_SNAKE) % MAX_SNAKE]. Moving means writing a new head and decrementing nothing; growing means the tail just doesn't get dropped that tick.
+
+Build order:
+
+Draw a static border and a stationary snake of length 3 to the console. Clear and redraw in a loop with Sleep(100). (under an hour)
+Make it move in a fixed direction, wrapping the ring buffer correctly. Verify with len = 3 that exactly three cells are lit.
+Read arrow keys non-blocking, change direction, reject 180° turns.
+Add food, collision with food, growth, score display.
+Add wall and self collision, a death state, and a "press R to restart".
+Stretch: speed ramps with score, high score persisted to a file.
+
+What will trip you up: Direction changes. The naive version lets you press up then left within one tick and turn 180° into your own neck, and it also feels laggy if you drop inputs. Buffer at most one direction change per tick in pending_dir, and validate it against dir (the direction you actually moved last), not against whatever's already sitting in the buffer.
+
+Difficulty: 2/5. No algorithms you haven't seen. The unfamiliar part is the loop structure, not the logic.
