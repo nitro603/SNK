@@ -109,39 +109,26 @@ void static changePosition(int* x, int* y, int direction) {
 
 int main() {
     //32x17 (middle is padded by 1 for aesthetics so middle is actually 33 wide)
-    //get input that will make it stop if the button x is pressed, windows library?
+    //now going to make the snake tail move
     int currentScore = 0;
     int currentFrame = 0;
     int snakeCordX = 14;
     int snakeCordY = 8;
 
-    //while (currentScore < 25) {
-
+    while (currentScore < 25) {
         printGameFrame(snakeCordX, snakeCordY);
-        printf("START X = %i Y = %i \n", snakeCordX, snakeCordY);
-        //printf("Score=%d \n",currentScore);
-        //if (_kbhit()) {
-          // currentScore++;
-          // int direction = getch();
-
-            int direction1 = 100;
-            changePosition(&snakeCordX, &snakeCordY, direction1);
-            printGameFrame(snakeCordX, snakeCordY);
-            printf("RIGHT X = %i Y = %i Pressed D %i\n", snakeCordX, snakeCordY, direction1);
-
-            int direction2 = 115;
-            changePosition(&snakeCordX, &snakeCordY, direction2);
-            printGameFrame(snakeCordX, snakeCordY);
-            printf("DOWN X = %i Y = %i Pressed S %i\n", snakeCordX, snakeCordY, direction2);
-
-
-        //}
-        //currentFrame ++;
-        //printf("frame %i", currentFrame);
-        //Sleep(100);
-        //clearScreen();
-        //fflush(stdout);
-    //}
+        printf("Score=%d \n",currentScore);
+        if (_kbhit()) {
+            currentScore++;
+            int direction = getch();
+            changePosition(&snakeCordX, &snakeCordY, direction);
+        }
+        currentFrame ++;
+        printf("frame %i", currentFrame);
+        Sleep(100);
+        clearScreen();
+        fflush(stdout);
+    }
 
     return 0;
 }
